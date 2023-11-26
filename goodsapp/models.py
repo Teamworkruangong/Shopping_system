@@ -29,6 +29,9 @@ class Goods(models.Model):
 
 
 
+
+
+
 class GoodsDetailName(models.Model):
     """详情名称表"""
     gdname = models.CharField(verbose_name='详情名称',max_length=30)
@@ -69,6 +72,8 @@ class Inventory(models.Model):
     color = models.ForeignKey(Color)
     goods = models.ForeignKey(Goods)
     size = models.ForeignKey(Size)
+
+
 
 
 

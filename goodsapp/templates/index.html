@@ -3,6 +3,16 @@
 {% block title %}商品首页{% endblock %}
 
 
+{% block headerjs %}
+    <style>
+        .redA{
+            color: red;
+            font-size:28px;
+        }
+
+    </style>
+{% endblock %}
+
 {% block main %}
 
 
@@ -50,10 +60,23 @@
 
 <div id="pager" style="text-align: center; font-size: 16px; overflow: hidden; margin-top: 10px;">
 
+    {% if goodsList.has_previous %}
+        <a href="/category/{{ currentCid }}/page/{{ goodsList.previous_page_number }}/" style="display: inline-block; padding: 5px; margin: 5px;">上一页</a>
+    {% endif %}
+
+
+    {% for page in page_list %}
+        <a href="/category/{{ currentCid }}/page/{{ page }}/" style="display: inline-block; padding: 5px; margin: 5px;" {% if page == goodsList.number %}class="redA"{% endif %}>{{ page }}</a>
+    {% endfor %}
 
 
 
-            <a href="http://127.0.0.1:8000/category/8/page/2" style="display: inline-block; padding: 5px; margin: 5px;">下一页</a>
+    {% if goodsList.has_next %}
+        <a href="/category/{{ currentCid }}/page/{{ goodsList.next_page_number }}/" style="display: inline-block; padding: 5px; margin: 5px;">下一页</a>
+    {% endif %}
+
+
+
 
 
 
