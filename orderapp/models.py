@@ -10,8 +10,8 @@ class Order(models.Model):
     trade_no = models.CharField(max_length=120,default='')
     status = models.CharField(max_length=20,default='待支付')
     payway = models.CharField(max_length=20,default='alipay')
-    address = models.ForeignKey(Address)
-    user = models.ForeignKey(UserInfo)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
 
     def __str__(self):
@@ -22,4 +22,4 @@ class OrderItem(models.Model):
     colorid = models.PositiveIntegerField()
     sizeid = models.PositiveIntegerField()
     count = models.PositiveIntegerField()
-    order = models.ForeignKey(Order)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)

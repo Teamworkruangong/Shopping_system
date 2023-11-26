@@ -2,11 +2,13 @@ import uuid
 
 import datetime
 import jsonpickle
+from django.db.models import F
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
 from cartapp.cartmanager import DBCartManger
+from goodsapp.models import Inventory
 from orderapp.models import Order, OrderItem
 from userapp.models import Address
 from utils.alipay_p3 import AliPay
@@ -96,14 +98,22 @@ def checkPayView(request):
 
     #进行校验
     if alipayObj.verify(params,sign):
-        # 修改订单状态
+        #获取当前登录用户对象
+        user = jsonpickle.loads(request.session.get('user',''))
 
+        # 修改订单状态
+        orderObj = Order.objects.get(out_trade_num=params.get('out_trade_no',''))
+        orderObj.trade_no = params.get('trade_no','')
+        orderObj.status = '待发货'
+        orderObj.save()
 
         #修改库存
-
+        orderItemList = orderObj.orderitem_set.all()
+        [Inventory.objects.filter(goods_id=oi.goodsid,color_id=oi.colorid,size_id=oi.sizeid).update(count=F('count')-oi.count) for oi in orderItemList if oi]
 
 
         #更新购物车表中数据
+        [user.cartitem_set.filter(goodsid=oi.goodsid,colorid=oi.colorid,sizeid=oi.sizeid,count=oi.count).delete()  for oi in orderItemList if oi]
 
 
 
