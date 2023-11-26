@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views import View
 
 from netshop.settings import BASE_DIR
-from userapp.models import UserInfo, Area
+from userapp.models import UserInfo, Area, Address
 from utils.code import gene_code, gene_text
 from django.core.serializers import serialize
 
@@ -110,8 +110,33 @@ class LogOutView(View):
 
 class AddressView(View):
     def get(self,request):
+        #获取当前登录用户下的收货地址信息
+        # 获取当前登录用户对象
+        userstr = request.session.get('user', '')
+        if userstr:
+            user = jsonpickle.loads(userstr)
 
-        return render(request,'address.html')
+        addr_list = user.address_set.all()
+
+
+        return render(request,'address.html',{'addr_list':addr_list})
+
+    def post(self,request):
+        #获取请求参数
+        aname = request.POST.get('aname','')
+        aphone = request.POST.get('aphone','')
+        addr = request.POST.get('addr','')
+
+        # 获取当前登录用户对象
+        userstr = request.session.get('user', '')
+        if userstr:
+            user = jsonpickle.loads(userstr)
+
+        #插入数据库表
+        Address.objects.create(aname=aname,aphone=aphone,addr=addr,userinfo=user,isdefault=(lambda count:True if count==0 else False)(user.address_set.count()))
+
+        return HttpResponseRedirect('/user/address/')
+
 
 
 def loadAreaView(request):
