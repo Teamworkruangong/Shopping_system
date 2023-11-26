@@ -17,7 +17,7 @@ def toOrderView(request):
     #判断当前用户是否登录
     if not request.session.get('user',''):
         # return HttpResponseRedirect('/user/login/?reflag=order&cartitems='+cartitems)
-        return render(request,'login.html',{'reflag':'order','cartitems':cartitems})
+        return render(request,'login.html',{'reflag':'order','cartitems':cartitems,'totalPrice':totalPrice})
 
 
     #反序列化cartitems
@@ -27,11 +27,15 @@ def toOrderView(request):
 
     #获取默认收货地址
     user = jsonpickle.loads(request.session.get('user',''))
-    addrObj = user.address_set.get(is_default=True)
+    addrObj = user.address_set.get(isdefault=True)
 
     #获取订单内容
     #[CartItem(),CartItem()]
     cartItemObjList = [DBCartManger(user).get_cartitems(**item) for item in cartitemList if item]
+
+    # toPrice = 0
+    # for ci in cartItemObjList:
+    #     toPrice += ci.getTotalPrice()
 
 
     return render(request,'order.html',{'addrObj':addrObj,'cartItemObjList':cartItemObjList,'totalPrice':totalPrice})
