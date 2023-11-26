@@ -74,14 +74,14 @@
                     <input type="number" name="" value="1">
                     <div class="jia">+</div>
                 </div>
-              <form action="http://127.0.0.1:8000/cart/" method="post">
+              <form action="/cart/" method="post">
+                    <input name="goodsid" type="hidden" value="{{ goods.id }}">
                     <input name="colorid" type="hidden">
-                    <input name="goodsid" type="hidden" value="4">
                     <input name="sizeid" type="hidden">
                     <input name="count" type="hidden">
-                    <input name="type" value="add" type="hidden">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="QYciumFpuMt1tAzw4HyUsSbgralhP9ykf6fRRkLbNhqtrzI6FElzKnFZdIenh6pT">
-                    <button class="male" onclick="goCart()">单独购买</button>
+                    <input name="flag" value="add" type="hidden">
+                    {% csrf_token %}
+                    <button class="male" onclick="goCart();">加入购物车</button>
               </form>
             </div>
          <div class="detail-con-nav">
@@ -128,16 +128,16 @@
 
         <div class="goods-content">
 
+        {% for recommend in recommend_list %}
 
-
-                    <div class="good">
-                        <a href="http://127.0.0.1:8000/goodsdetails/5">
-                            <img src="/static/bai_mt1VrH5.jpg" width="285px" height="285px">
-                            <p class="name">秋时尚印花两件套装裙</p>
+            <div class="good">
+                        <a href="/goodsdetails/{{ recommend.id }}/">
+                            <img src="{{ recommend.getImgUrl }}" width="285px" height="285px">
+                            <p class="name">{{ recommend.gname }}</p>
                             <div class="price">
                                 <i>￥</i>
-                                <p class="big">35.00</p>
-                                <s>￥100.00</s>
+                                <p class="big">{{ recommend.price }}</p>
+                                <s>￥{{ recommend.oldprice }}</s>
                             </div>
                             <div class="sale">
                                 特卖
@@ -146,38 +146,7 @@
                     </div>
 
 
-
-                    <div class="good">
-                        <a href="http://127.0.0.1:8000/goodsdetails/6">
-                            <img src="/static/hong_y7wQwRw.jpg" width="285px" height="285px">
-                            <p class="name">韩版侧开叉宽松毛衣</p>
-                            <div class="price">
-                                <i>￥</i>
-                                <p class="big">39.00</p>
-                                <s>￥369.00</s>
-                            </div>
-                            <div class="sale">
-                                特卖
-                            </div>
-                        </a>
-                    </div>
-
-
-
-                    <div class="good">
-                        <a href="http://127.0.0.1:8000/goodsdetails/18">
-                            <img src="/static/lv_eFlravj.jpg" width="285px" height="285px">
-                            <p class="name">时尚修身两件套装裙</p>
-                            <div class="price">
-                                <i>￥</i>
-                                <p class="big">68.90</p>
-                                <s>￥299.00</s>
-                            </div>
-                            <div class="sale">
-                                特卖
-                            </div>
-                        </a>
-                    </div>
+        {% endfor %}
 
 
 

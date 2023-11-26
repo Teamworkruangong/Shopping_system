@@ -86,8 +86,8 @@ class GoodsDetailName(models.Model):
 class GoodsDetail(models.Model):
     """商品详情表"""
     gdurl = models.ImageField(verbose_name='详情图片地址',upload_to='')
-    detailname = models.ForeignKey(GoodsDetailName)
-    goods = models.ForeignKey(Goods)
+    detailname = models.ForeignKey(GoodsDetailName, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.detailname.gdname
@@ -115,9 +115,9 @@ class Color(models.Model):
 class Inventory(models.Model):
     """库存表"""
     count = models.PositiveIntegerField(verbose_name='库存数量')
-    color = models.ForeignKey(Color)
-    goods = models.ForeignKey(Goods)
-    size = models.ForeignKey(Size)
+    color = models.ForeignKey(Color, on_delete=models.CASCADE)
+    goods = models.ForeignKey(Goods, on_delete=models.CASCADE)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)
 
 
 

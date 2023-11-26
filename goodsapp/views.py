@@ -50,14 +50,49 @@ class IndexView(View):
         return render(request,'index.html',{'categoryList':categoryList,'goodsList':page_goods_obj,'currentCid':categoryid,'page_list':page_list})
 
 
+
+def recommend(func):
+    def _wrapper(detailView,request,goodsid,*args,**kwargs):
+        #获取cookie中的goodsid字符串
+        c_goodsid = request.COOKIES.get('c_goodsid','')
+
+        #存放用户访问过的商品ID列表
+        goodsIdList = [id for id in c_goodsid.split() if id.strip()]
+
+        #存放用户访问过的商品对象列表
+        goodsObjList = [Goods.objects.get(id=gid) for gid in goodsIdList if gid != goodsid and Goods.objects.get(id=gid).category_id == Goods.objects.get(id=goodsid).category_id][:4]
+
+        if goodsid in goodsIdList:
+            goodsIdList.remove(goodsid)
+            goodsIdList.insert(0,goodsid)
+        else:
+            goodsIdList.insert(0, goodsid)
+
+
+        #调用视图方法
+        response = func(detailView,request,goodsid,recommend_list=goodsObjList,*args,**kwargs)
+
+
+        #将用户访问过的商品ID列表存放至cookie中
+        response.set_cookie('c_goodsid',' '.join(goodsIdList),max_age=3*24*60*60)
+
+        return response
+
+    return _wrapper
+
+
+
+
+
 class DetailView(View):
-    def get(self,request,goodsid):
+    @recommend
+    def get(self,request,goodsid,recommend_list=[]):
         goodsid = int(goodsid)
 
         #根据商品ID获取商品详情信息
         try:
             goods = Goods.objects.get(id=goodsid)
-            return render(request,'detail.html',{'goods':goods})
+            return render(request,'detail.html',{'goods':goods,'recommend_list':recommend_list})
 
         except Goods.DoesNotExist:
             return HttpResponse(status=404)
