@@ -71,7 +71,7 @@ class SessionCartManager(CartManager):
         if key in self.session[self.cart_name]:
             # CartItem()
             cartitem = jsonpickle.loads(self.session[self.cart_name][key])
-
+            cartitem.isdelete = False
             cartitem.count = int(str(cartitem.count))+int(step)
 
 
@@ -91,7 +91,7 @@ class SessionCartManager(CartManager):
 
     def migrateSession2DB(self):
         if 'user' in self.session:
-            user = self.session.get('user')
+            user = jsonpickle.loads(self.session.get('user'))
             for cartitem in self.queryAll():
                 if CartItem.objects.filter(goodsid=cartitem.goodsid,colorid=cartitem.colorid,sizeid=cartitem.sizeid).count()==0:
                     cartitem.user = user

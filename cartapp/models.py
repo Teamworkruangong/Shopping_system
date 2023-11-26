@@ -11,7 +11,7 @@ class CartItem(models.Model):
     sizeid = models.PositiveIntegerField()
     count = models.PositiveIntegerField(default=0)
     isdelete = models.BooleanField(default=False)
-    user = models.ForeignKey(UserInfo)
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
     def getColor(self):
         return Color.objects.get(id=self.colorid)
