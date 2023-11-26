@@ -24,6 +24,11 @@ class Goods(models.Model):
         return self.gname
 
 
+    def getImgUrl(self):
+        return self.inventory_set.first().color.colorurl
+
+
+
 class GoodsDetailName(models.Model):
     """详情名称表"""
     gdname = models.CharField(verbose_name='详情名称',max_length=30)
