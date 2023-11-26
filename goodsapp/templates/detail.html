@@ -101,68 +101,19 @@
     </div>
     <div class="zhanshi">
 
+{# {'':[url1,url2,...]} #}
 
-
-            <div class="zhanshi-model">
-                <p>参数规格</p>
-                <div class="line"></div>
-
-                 <img src="/static/B5_03.png" alt="">
-
-
-
-            </div>
-
-
+        {% for detailName,urlList in goods.getDetaiInfo.items %}
 
             <div class="zhanshi-model">
-                <p>整体款式</p>
+                <p>{{ detailName }}</p>
                 <div class="line"></div>
-
-                 <img src="/static/B5_06.png" alt="">
-
-
+                {% for url in urlList %}
+                    <img src="{{ url }}" alt="">
+                {% endfor %}
 
             </div>
-
-
-
-            <div class="zhanshi-model">
-                <p>模特实拍</p>
-                <div class="line"></div>
-
-                 <img src="/static/1_mpwtoGA.jpg" alt="">
-
-                 <img src="/static/2_UuQkY4b.jpg" alt="">
-
-                 <img src="/static/3_ViMgWv6.jpg" alt="">
-
-                 <img src="/static/4_BDmgdFv.jpg" alt="">
-
-                 <img src="/static/5_ozWIsej.jpg" alt="">
-
-                 <img src="/static/6_Pny8yTQ.jpg" alt="">
-
-                 <img src="/static/7_K4tB09L.jpg" alt="">
-
-                 <img src="/static/8_60MJMwS.jpg" alt="">
-
-                 <img src="/static/9_8YomGSk.jpg" alt="">
-
-                 <img src="/static/10_vonnLjk.jpg" alt="">
-
-
-
-            </div>
-
-
-
-
-
-
-
-
-
+        {% endfor %}
 
         </div>
     </div>

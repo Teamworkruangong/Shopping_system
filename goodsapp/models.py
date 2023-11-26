@@ -38,6 +38,8 @@ class Goods(models.Model):
 
         return colors
 
+
+
     def getSizes(self):
         sizes = []
 
@@ -47,6 +49,25 @@ class Goods(models.Model):
                 sizes.append(size)
 
         return sizes
+
+    # {'参数规格'：['url'],'整体款式'：['url'],'模特实拍'：['url1','url2',....]}
+    def getDetaiInfo(self):
+        datas = {}
+
+        for detail in self.goodsdetail_set.all():
+            #获取详情名称
+            detailName = detail.getDName()
+            #判断detailname是否在字典中存在
+            if detailName not in datas:
+                datas[detailName] = [detail.gdurl]
+            else:
+                datas[detailName].append(detail.gdurl)
+
+
+        return datas
+
+
+
 
 
 
@@ -69,6 +90,9 @@ class GoodsDetail(models.Model):
     goods = models.ForeignKey(Goods)
 
     def __str__(self):
+        return self.detailname.gdname
+
+    def getDName(self):
         return self.detailname.gdname
 
 
