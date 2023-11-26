@@ -24,4 +24,4 @@ class CartItem(models.Model):
         return Goods.objects.get(id=self.goodsid)
 
     def getTotalPrice(self):
-        return self.getGoods().price*self.count
+        return int(self.getGoods().price)*int(self.count)

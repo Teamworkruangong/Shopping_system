@@ -30,12 +30,14 @@ class SessionCartManager(CartManager):
     def __init__(self,session):
         self.session = session
         # 创建购物车 #  {cart:{key1:cartitem,key2:cartitem}}
+        # request.session['cart']['key1']
         if self.cart_name not in self.session:
             self.session[self.cart_name] = OrderedDict()
 
 
     def __get_key(self,goodsid,colorid,sizeid):
         return goodsid+','+colorid+','+sizeid
+        # '1,1,1'
 
 
 
@@ -52,7 +54,7 @@ class SessionCartManager(CartManager):
             self.update(goodsid,colorid,sizeid,count,*args,**kwargs)
         else:
 
-            self.session[self.cart_name][key] = CartItem(goodsid=goodsid,colorid=colorid,sizeid=sizeid,count=count)
+            self.session[self.cart_name][key] = jsonpickle.dumps(CartItem(goodsid=goodsid,colorid=colorid,sizeid=sizeid,count=count))
 
 
 
@@ -77,9 +79,13 @@ class SessionCartManager(CartManager):
 
 
     def queryAll(self,*args,**kwargs):
+        cartitemList = []
 
 
-        return self.session[self.cart_name].values()
+        for c in  self.session[self.cart_name].values():
+            cartitemList.append(jsonpickle.loads(c))
+
+        return cartitemList
 
     def migrateSession2DB(self):
         if 'user' in self.session:
