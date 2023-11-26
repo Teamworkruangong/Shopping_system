@@ -69,7 +69,9 @@ class SessionCartManager(CartManager):
 
         key = self.__get_key(goodsid,colorid,sizeid)
         if key in self.session[self.cart_name]:
-            cartitem = self.session[self.cart_name][key]
+            # CartItem()
+            cartitem = jsonpickle.loads(self.session[self.cart_name][key])
+
             cartitem.count = int(str(cartitem.count))+int(step)
 
 
