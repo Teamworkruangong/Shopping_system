@@ -6,6 +6,7 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import View
 
+from cartapp.cartmanager import SessionCartManager
 from netshop.settings import BASE_DIR
 from userapp.models import UserInfo, Area, Address
 from utils.code import gene_code, gene_text
@@ -43,17 +44,32 @@ def centerView(request):
 
 class LoginView(View):
     def get(self,request):
-        return render(request,'login.html')
+        reflag = request.GET.get('reflag','')
+        return render(request,'login.html',{'reflag':reflag})
 
     def post(self,request):
         #获取请求参数
         uname = request.POST.get('account','')
         pwd = request.POST.get('password','')
 
+        reflag = request.POST.get('reflag','')
+        cartitems = request.POST.get('cartitems','')
+        totalPrice = request.POST.get('totalPrice','')
+
         #判断是否登录成功
         user = UserInfo.objects.filter(uname=uname,pwd=pwd)
         if user:
             request.session['user'] = jsonpickle.dumps(user[0])
+
+            #将session中的购物项目存放至数据库
+            SessionCartManager(request.session).migrateSession2DB()
+
+            if reflag == 'cart':
+                return HttpResponseRedirect('/cart/queryAll/')
+            elif reflag == 'order':
+                return HttpResponseRedirect('/order/?cartitems='+cartitems+'&totalPrice='+totalPrice)
+
+
             return HttpResponseRedirect('/user/center/')
 
         return HttpResponseRedirect('/user/login/')
@@ -150,3 +166,16 @@ def loadAreaView(request):
     jareaList = serialize('json',areaList)
 
     return JsonResponse({'jareaList':jareaList})
+
+
+def updateDefaultAddrView(request):
+    #获取请求参数
+    addrid = request.GET.get('addrid',-1)
+    addrid = int(addrid)
+
+    #修改数据
+    Address.objects.filter(id=addrid).update(isdefault=True)
+    Address.objects.exclude(id=addrid).update(isdefault=False)
+
+
+    return HttpResponseRedirect('/user/address/')

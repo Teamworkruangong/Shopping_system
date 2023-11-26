@@ -36,7 +36,7 @@ class Address(models.Model):
     aphone = models.CharField(max_length=11)
     addr = models.CharField(max_length=100)
     isdefault = models.BooleanField(default=False)
-    userinfo = models.ForeignKey(UserInfo)
+    userinfo = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
 
 
     def __str__(self):

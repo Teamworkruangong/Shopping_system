@@ -51,7 +51,7 @@
 						<hr>
 						<ul class="am-avg-sm-1 am-avg-md-3 am-thumbnails">
                         {% for addr in addr_list %}
-                            <li class="user-addresslist {% if addr.isdefault == True %}defaultAddr{% endif %}">
+                            <li class="user-addresslist {% if addr.isdefault == True %}defaultAddr{% endif %}" onclick="updateDefaultAddr({{ addr.id }});">
 								<span class="new-option-r"><i class="am-icon-check-circle"></i>默认地址</span>
 								<p class="new-tit new-p-re">
 									<span class="new-txt">{{ addr.aname }}</span>
@@ -258,6 +258,15 @@
 
 
     }
+
+    </script>
+
+
+    <script>
+        function updateDefaultAddr(addrid) {
+            window.location.href = '/user/updateDefaultAddr/?addrid='+addrid;
+        }
+
 
     </script>
 

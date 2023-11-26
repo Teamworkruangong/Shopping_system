@@ -1,4 +1,5 @@
-from django.conf.urls import url
+from django.urls import re_path as url
+
 from . import views
 
 urlpatterns=[
@@ -10,6 +11,7 @@ urlpatterns=[
     url(r'^logout/$',views.LogOutView.as_view()),
     url(r'^address/$',views.AddressView.as_view()),
     url(r'^loadArea/$',views.loadAreaView),
+    url(r'^updateDefaultAddr/$',views.updateDefaultAddrView),
 
 
 ]
