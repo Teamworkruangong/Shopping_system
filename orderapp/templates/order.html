@@ -109,23 +109,24 @@
 
     <script>
         $("#pay").click(function(){
-            var cartitems = []
+            var cartitems = [];
 
+            //相当于for循环   index 遍历的每个元素的下标     item 遍历的每个元素对象
             $.each($('.msg ul'),function(index,item){
                 cartitems.push({"goodsid":$(item).attr('goodsid'),
                                 "sizeid":$(item).attr('sizeid'),
                                 "colorid":$(item).attr('colorid'),
                                 "count":$(item).attr('count')
-                                })
+                                });
 
             })
 
 
             //拼接请求参数
-            var params = 'address=1&payway='+$('.way .on').attr('name')+'&cartitems='+JSON.stringify(cartitems)
+            var params = 'address={{ addrObj.id }}&payway='+$('.way .on').attr('name')+'&cartitems='+JSON.stringify(cartitems)+'&totalPrice={{ totalPrice }}';
 
             //拼接请求地址
-            var url = '/order/toorder/?'+params
+            var url = '/order/toPay/?'+params
 
             $(this).attr('href',url)
 
