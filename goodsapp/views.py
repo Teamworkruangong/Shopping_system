@@ -1,4 +1,6 @@
 import math
+
+from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
@@ -46,3 +48,16 @@ class IndexView(View):
 
 
         return render(request,'index.html',{'categoryList':categoryList,'goodsList':page_goods_obj,'currentCid':categoryid,'page_list':page_list})
+
+
+class DetailView(View):
+    def get(self,request,goodsid):
+        goodsid = int(goodsid)
+
+        #根据商品ID获取商品详情信息
+        try:
+            goods = Goods.objects.get(id=goodsid)
+            return render(request,'detail.html',{'goods':goods})
+
+        except Goods.DoesNotExist:
+            return HttpResponse(status=404)

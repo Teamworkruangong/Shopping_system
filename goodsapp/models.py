@@ -28,6 +28,28 @@ class Goods(models.Model):
         return self.inventory_set.first().color.colorurl
 
 
+    def getColors(self):
+        colors = []
+
+        for inventory in self.inventory_set.all():
+            color = inventory.color
+            if color not in colors:
+                colors.append(color)
+
+        return colors
+
+    def getSizes(self):
+        sizes = []
+
+        for inventory in self.inventory_set.all():
+            size = inventory.size
+            if size not in sizes:
+                sizes.append(size)
+
+        return sizes
+
+
+
 
 
 
