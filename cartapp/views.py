@@ -16,6 +16,16 @@ class CartView(View):
             cartManagerObj = getCartManger(request)
             cartManagerObj.add(**request.POST.dict())
 
+        elif flag == 'plus':
+            cartManagerObj = getCartManger(request)
+            #{'flag':'plus','goodsid':'1',...}
+            cartManagerObj.update(step=1,**request.POST.dict())
+
+        elif flag == 'minus':
+            cartManagerObj = getCartManger(request)
+            # {'flag':'plus','goodsid':'1',...}
+            cartManagerObj.update(step=-1, **request.POST.dict())
+
 
         return HttpResponseRedirect('/cart/queryAll/')
 
